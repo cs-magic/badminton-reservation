@@ -62,6 +62,8 @@ export default function MapSelector({ onPlacesSelected }: MapSelectorProps) {
         function (point: typeof window.BMap.Point | null) {
           if (!point) return console.error("没有解析到结果");
 
+          console.log("found place: ", point);
+
           const marker = new window.BMap.Marker(point);
           bmap.addOverlay(marker);
 
