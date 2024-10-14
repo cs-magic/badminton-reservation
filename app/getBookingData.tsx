@@ -3,7 +3,7 @@
 import { api } from "@cs-magic/common/dist/api/api.js";
 import { BookingSlot } from "../types";
 
-export async function getMockBookingData(date: string, gym: string): Promise<BookingSlot[]> {
+export async function getBookingData(date: string, gym: string): Promise<BookingSlot[]> {
     const data = await api.get(
         `https://api.cs-magic.cn/badminton?date=${date}&gym=${gym}`
     );

@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@cs-magic/shadcn": "workspace:^",
-    "next": "^14.2.15"
+    "next": "^14.2.15",
+    "react-bmapgl": "^0.2.28"
   }
 }
