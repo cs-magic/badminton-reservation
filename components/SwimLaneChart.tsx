@@ -1,7 +1,8 @@
-import { BookingSlot, PLACES } from '../types';
+import { BookingSlot, PLACES, PLACE_ABBREVIATIONS } from '../types';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import PlaceFilter from './PlaceFilter';
 import React from 'react';
+import { cn } from '@cs-magic/shadcn/lib/utils';
 
 interface SwimLaneChartProps {
   bookingData: BookingSlot[];
@@ -10,8 +11,10 @@ interface SwimLaneChartProps {
 }
 
 export default function SwimLaneChart({ bookingData, onPlaceChange, selectedDate }: SwimLaneChartProps) {
+  // 状态：选中的场地
   const [selectedPlaces, setSelectedPlaces] = useState<string[]>([...PLACES]);
 
+  // 处理场地选择的回调函数
   const handlePlaceToggle = useCallback((place: string) => {
     setSelectedPlaces(prev => {
       const newSelectedPlaces = prev.includes(place)
@@ -21,25 +24,30 @@ export default function SwimLaneChart({ bookingData, onPlaceChange, selectedDate
     });
   }, []);
 
+  // 当选中的场地变化时，通知父组件
   useEffect(() => {
     onPlaceChange(selectedPlaces);
   }, [selectedPlaces, onPlaceChange]);
 
+  // 计算时间槽和分组预订数据
   const { timeSlots, groupedBookingData } = useMemo(() => {
     let earliestTime = '23:59';
     let latestTime = '00:00';
     
+    // 按场地分组预订数据
     const grouped = bookingData.reduce((acc, slot) => {
       if (!acc[slot.place]) {
         acc[slot.place] = [];
       }
       acc[slot.place].push(slot);
       
+      // 更新最早和最晚时间
       earliestTime = slot.start_time < earliestTime ? slot.start_time : earliestTime;
       latestTime = slot.end_time > latestTime ? slot.end_time : latestTime;
       return acc;
     }, {} as Record<string, BookingSlot[]>);
 
+    // 计算时间槽
     const startHour = Math.floor(parseInt(earliestTime.split(':')[0]));
     const endHour = Math.ceil(parseInt(latestTime.split(':')[0]) + parseInt(latestTime.split(':')[1]) / 60);
 
@@ -52,22 +60,28 @@ export default function SwimLaneChart({ bookingData, onPlaceChange, selectedDate
     return { timeSlots: slots, groupedBookingData: grouped };
   }, [bookingData]);
 
+  console.log({bookingData});
+
   return (
     <div className="space-y-6">
+      {/* 场地筛选器 */}
       <PlaceFilter
         places={[...PLACES]}
         selectedPlaces={selectedPlaces}
         onPlaceToggle={handlePlaceToggle}
+        placeAbbreviations={PLACE_ABBREVIATIONS}
       />
       <div className="relative overflow-x-auto">
+        {/* 场地标题行 */}
         <div className="flex">
           <div className="w-16 flex-shrink-0"></div>
           {selectedPlaces.map(place => (
             <div key={place} className="flex-1 text-center text-sm font-medium p-2 border-r border-gray-200">
-              {place}
+              {PLACE_ABBREVIATIONS[place]}
             </div>
           ))}
         </div>
+        {/* 图例 */}
         <div className="flex justify-end py-2 bg-white border-b border-gray-200">
           <div className="flex items-center space-x-4 px-4">
             <div className="flex items-center">
@@ -79,29 +93,52 @@ export default function SwimLaneChart({ bookingData, onPlaceChange, selectedDate
               <span className="text-xs">不可预订</span>
             </div>
             <div className="flex items-center">
-              <div className="w-4 h-4 bg-gray-200 mr-2"></div>
+              <div className="w-4 h-4 bg-white mr-2"></div>
               <span className="text-xs">无数据</span>
             </div>
           </div>
         </div>
+        {/* 时间槽网格 */}
         <div className="relative">
           {timeSlots.map((time, index) => (
             <div key={time} className="flex">
+              {/* 时间标签 */}
               <div className="w-16 flex-shrink-0 relative">
-                {index % 2 === 0 && (
+                {time.endsWith('00') && (
                   <span className="absolute right-2 top-0 -translate-y-1/2 text-xs text-gray-500">
                     {time}
                   </span>
                 )}
               </div>
+              {/* 每个场地的时间槽 */}
               {selectedPlaces.map(place => {
                 const slot = groupedBookingData[place]?.find(s => 
                   s.start_time <= time && s.end_time > time
                 );
+                const isAvailable = slot && slot.available_count > 0;
+                const isHourBoundary = time.endsWith('00');
+                const shouldHideBorder = slot && (
+                  (time.endsWith('30')) || 
+                  (time.endsWith('00') && slot.start_time <= time && time < slot.end_time)
+                );
+
                 return (
-                  <div key={`${time}-${place}`} className="flex-1 h-8 border-r border-t border-gray-200 relative">
-                    <div className={`absolute inset-0 ${slot ? (slot.available_count > 0 ? 'bg-green-100' : 'bg-gray-100') : 'bg-white'}`}>
-                      {slot && slot.available_count > 0 && (
+                  <div 
+                    key={`${time}-${place}`} 
+                    className={cn(
+                        `flex-1 h-8 relative border-r border-gray-200`,
+                        isHourBoundary  && "border-t",
+                        // shouldHideBorder ? 'border-t-transparent' : 'border-t-gray-200'
+                        !shouldHideBorder && "border-t-transparent"
+                    )}
+                  >
+                    {/* 时间槽背景 */}
+                    <div className={`absolute inset-0 ${
+                      slot 
+                        ? (isAvailable ? 'bg-green-500/50' : 'bg-gray-100') 
+                        : 'bg-white'
+                    }`}>
+                      {isAvailable && (
                         <div className="absolute inset-0 flex items-center justify-center">
                           <span className="text-xs font-medium text-green-800">
                             {/* {slot.available_count} */}

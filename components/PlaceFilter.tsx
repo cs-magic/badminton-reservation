@@ -1,12 +1,14 @@
 import React from 'react';
+import { Place } from '../types';
 
 interface PlaceFilterProps {
-  places: string[];
-  selectedPlaces: string[];
-  onPlaceToggle: (place: string) => void;
+  places: Place[];
+  selectedPlaces: Place[];
+  onPlaceToggle: (place: Place) => void;
+  placeAbbreviations: Record<Place, string>;
 }
 
-export default function PlaceFilter({ places, selectedPlaces, onPlaceToggle }: PlaceFilterProps) {
+export default function PlaceFilter({ places, selectedPlaces, onPlaceToggle, placeAbbreviations }: PlaceFilterProps) {
   return (
     <div className="mb-6">
       <h2 className="text-lg font-semibold text-gray-700 mb-3">场地选择</h2>
@@ -19,7 +21,7 @@ export default function PlaceFilter({ places, selectedPlaces, onPlaceToggle }: P
               onChange={() => onPlaceToggle(place)}
               className="form-checkbox h-4 w-4 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300"
             />
-            <span className="ml-2 text-sm text-gray-700">{place}</span>
+            <span className="ml-2 text-sm text-gray-700">{placeAbbreviations[place]}</span>
           </label>
         ))}
       </div>

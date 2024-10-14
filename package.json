@@ -19,6 +19,7 @@
     "tailwindcss": "^3.4.13"
   },
   "dependencies": {
+    "@cs-magic/shadcn": "workspace:^",
     "next": "^14.2.15"
   }
 }

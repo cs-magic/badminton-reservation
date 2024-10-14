@@ -13,3 +13,10 @@ export const PLACES = [
 ] as const;
 
 export type Place = typeof PLACES[number];
+
+export const PLACE_ABBREVIATIONS: Record<Place, string> = {
+  "北科大体育馆": "北科大体育馆",
+  "清华大学气膜馆羽毛球场": "清华气膜馆",
+  "清华大学综体羽毛球场": "清华综体",
+  "清华大学西体羽毛球场": "清华西体"
+};
