@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import SwimLaneChart from "../components/SwimLaneChart";
 import DatePicker from "../components/DatePicker";
-import { BookingSlot, Place } from "../types";
+import { BookingSlot, Place, PLACES } from "../types";
 import { getBookingData } from "./getBookingData";
 import dynamic from "next/dynamic";
 const MapSelector = dynamic(() => import("../components/MapSelector"), { ssr: false });

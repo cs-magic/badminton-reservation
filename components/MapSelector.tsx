@@ -51,31 +51,17 @@ export default function MapSelector({ onPlacesSelected }: MapSelectorProps) {
   }, [mapRef]);
 
   const addPlaceMarkers = (bmap: any, centerPoint: any) => {
-    //创建地址解析器实例
-    var myGeo = new window.BMap.Geocoder();
+    PLACES.forEach((placeInfo) => {
+      const point = new window.BMap.Point(placeInfo.longitude, placeInfo.latitude);
+      const marker = new window.BMap.Marker(point);
+      bmap.addOverlay(marker);
 
-    PLACES.forEach((place, index) => {
-      // 将地址解析结果显示在地图上，并调整地图视野
-      console.log("finding place: ", place);
-      myGeo.getPoint(
-        place,
-        function (point: typeof window.BMap.Point | null) {
-          if (!point) return console.error("没有解析到结果");
+      const label = new window.BMap.Label(placeInfo.abbreviation, {
+        offset: new window.BMap.Size(20, -10),
+      });
+      marker.setLabel(label);
 
-          console.log("found place: ", point);
-
-          const marker = new window.BMap.Marker(point);
-          bmap.addOverlay(marker);
-
-          const label = new window.BMap.Label(PLACE_ABBREVIATIONS[place], {
-            offset: new window.BMap.Size(20, -10),
-          });
-          marker.setLabel(label);
-
-          marker.addEventListener("click", () => handlePlaceToggle(place));
-        },
-        "北京市"
-      );
+      marker.addEventListener("click", () => handlePlaceToggle(placeInfo.name));
     });
   };
 
@@ -97,19 +83,19 @@ export default function MapSelector({ onPlacesSelected }: MapSelectorProps) {
         className="w-full h-64 bg-gray-200 rounded-lg mb-4"
       ></div>
       <div className="flex flex-wrap gap-3">
-        {PLACES.map((place) => (
+        {PLACES.map((placeInfo) => (
           <label
-            key={place}
+            key={placeInfo.name}
             className="inline-flex items-center bg-white border rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
           >
             <input
               type="checkbox"
-              checked={selectedPlaces.includes(place)}
-              onChange={() => handlePlaceToggle(place)}
+              checked={selectedPlaces.includes(placeInfo.name)}
+              onChange={() => handlePlaceToggle(placeInfo.name)}
               className="form-checkbox h-4 w-4 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300"
             />
             <span className="ml-2 text-sm text-gray-700">
-              {PLACE_ABBREVIATIONS[place]}
+              {placeInfo.abbreviation}
             </span>
           </label>
         ))}

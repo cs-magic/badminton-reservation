@@ -1,6 +1,6 @@
 import { cn } from "@cs-magic/shadcn/lib/utils";
 import { useMemo } from "react";
-import { BookingSlot, PLACE_ABBREVIATIONS, Place } from "../types";
+import { BookingSlot, PLACE_ABBREVIATIONS, Place, PLACES } from "../types";
 
 interface SwimLaneChartProps {
   bookingData: BookingSlot[];
@@ -62,14 +62,17 @@ export default function SwimLaneChart({
         {/* 场地标题行 */}
         <div className="flex">
           <div className="w-16 flex-shrink-0"></div>
-          {selectedPlaces.map((place) => (
-            <div
-              key={place}
-              className="flex-1 text-center text-sm font-medium p-2 border-r border-gray-200"
-            >
-              {PLACE_ABBREVIATIONS[place]}
-            </div>
-          ))}
+          {selectedPlaces.map((place) => {
+            const placeInfo = PLACES.find(p => p.name === place);
+            return (
+              <div
+                key={place}
+                className="flex-1 text-center text-sm font-medium p-2 border-r border-gray-200"
+              >
+                {placeInfo ? placeInfo.abbreviation : place}
+              </div>
+            );
+          })}
         </div>
         {/* 图例 */}
         <div className="flex justify-end py-2 bg-white border-b border-gray-200">
