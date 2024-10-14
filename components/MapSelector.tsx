@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Place, PLACES, PLACE_ABBREVIATIONS } from '../types';
-
+import React, { useState, useEffect, useRef } from "react";
+import { Place, PLACES, PLACE_ABBREVIATIONS } from "../types";
 
 interface MapSelectorProps {
   onPlacesSelected: (places: Place[]) => void;
@@ -41,38 +40,53 @@ export default function MapSelector({ onPlacesSelected }: MapSelectorProps) {
           const mk = new window.BMap.Marker(r.point);
           bmap.addOverlay(mk);
           bmap.panTo(r.point);
-          
+
           // 在用户位置周围添加场地标记
           addPlaceMarkers(bmap, r.point);
         } else {
-          console.log('Failed to get user location:', geolocation.getStatus());
+          console.log("Failed to get user location:", geolocation.getStatus());
         }
       });
     }
   }, [mapRef]);
 
   const addPlaceMarkers = (bmap: any, centerPoint: any) => {
+    //创建地址解析器实例
+    var myGeo = new window.BMap.Geocoder();
+
     PLACES.forEach((place, index) => {
-      // 这里我们模拟场地位置，实际应用中应该使用真实坐标
-      const lat = centerPoint.lat + (Math.random() - 0.5) * 0.05;
-      const lng = centerPoint.lng + (Math.random() - 0.5) * 0.05;
-      const point = new window.BMap.Point(lng, lat);
-      const marker = new window.BMap.Marker(point);
-      bmap.addOverlay(marker);
+      // 将地址解析结果显示在地图上，并调整地图视野
+      myGeo.getPoint(
+        place,
+        function (point: typeof window.BMap.Point | null) {
+          if (!point) return console.error("没有解析到结果");
 
-      const label = new window.BMap.Label(PLACE_ABBREVIATIONS[place], {
-        offset: new window.BMap.Size(20, -10)
-      });
-      marker.setLabel(label);
+          const marker = new window.BMap.Marker(point);
+          bmap.addOverlay(marker);
 
-      marker.addEventListener('click', () => handlePlaceToggle(place));
+          const label = new window.BMap.Label(PLACE_ABBREVIATIONS[place], {
+            offset: new window.BMap.Size(20, -10),
+          });
+          marker.setLabel(label);
+
+          marker.addEventListener("click", () => handlePlaceToggle(place));
+
+          // 将场馆信息添加到地图上
+          const infoWindow = new window.BMap.InfoWindow(
+            PLACE_ABBREVIATIONS[place],
+            new window.BMap.Size(200, 100)
+          );
+          marker.openInfoWindow(infoWindow);
+        },
+        "北京市"
+      );
     });
   };
 
   const handlePlaceToggle = (place: Place) => {
-    setSelectedPlaces(prev => {
+    setSelectedPlaces((prev) => {
       const newSelectedPlaces = prev.includes(place)
-        ? prev.filter(p => p !== place)
+        ? prev.filter((p) => p !== place)
         : [...prev, place];
       onPlacesSelected(newSelectedPlaces);
       return newSelectedPlaces;
@@ -82,17 +96,25 @@ export default function MapSelector({ onPlacesSelected }: MapSelectorProps) {
   return (
     <div className="mb-6">
       <h2 className="text-lg font-semibold text-gray-700 mb-3">选择附近场地</h2>
-      <div ref={mapRef} className="w-full h-64 bg-gray-200 rounded-lg mb-4"></div>
+      <div
+        ref={mapRef}
+        className="w-full h-64 bg-gray-200 rounded-lg mb-4"
+      ></div>
       <div className="flex flex-wrap gap-3">
-        {PLACES.map(place => (
-          <label key={place} className="inline-flex items-center bg-white border rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer">
+        {PLACES.map((place) => (
+          <label
+            key={place}
+            className="inline-flex items-center bg-white border rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
+          >
             <input
               type="checkbox"
               checked={selectedPlaces.includes(place)}
               onChange={() => handlePlaceToggle(place)}
               className="form-checkbox h-4 w-4 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300"
             />
-            <span className="ml-2 text-sm text-gray-700">{PLACE_ABBREVIATIONS[place]}</span>
+            <span className="ml-2 text-sm text-gray-700">
+              {PLACE_ABBREVIATIONS[place]}
+            </span>
           </label>
         ))}
       </div>
