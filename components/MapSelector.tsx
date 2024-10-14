@@ -56,6 +56,7 @@ export default function MapSelector({ onPlacesSelected }: MapSelectorProps) {
 
     PLACES.forEach((place, index) => {
       // 将地址解析结果显示在地图上，并调整地图视野
+      console.log("finding place: ", place);
       myGeo.getPoint(
         place,
         function (point: typeof window.BMap.Point | null) {
@@ -70,13 +71,6 @@ export default function MapSelector({ onPlacesSelected }: MapSelectorProps) {
           marker.setLabel(label);
 
           marker.addEventListener("click", () => handlePlaceToggle(place));
-
-          // 将场馆信息添加到地图上
-          const infoWindow = new window.BMap.InfoWindow(
-            PLACE_ABBREVIATIONS[place],
-            new window.BMap.Size(200, 100)
-          );
-          marker.openInfoWindow(infoWindow);
         },
         "北京市"
       );
