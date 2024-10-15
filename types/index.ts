@@ -14,12 +14,16 @@ export interface PlaceInfo {
   coordinateSystem: string;
 }
 
+/**
+ * fixed lng/lat via Baidu Map via limiting the city to be "北京"
+ * try it at: https://api.cs-magic.cn/docs#/Map/baidu_geocoding_map_baidu_geocoding_get
+ */
 export const PLACES: PlaceInfo[] = [
   {
     name: "北科大体育馆",
     abbreviation: "北科大体育馆",
-    longitude: 113.9464959875219,
-    latitude: 22.53159997324487,
+    longitude: 116.36878597262196,
+    latitude: 39.996240052065495,
     addressType: "商务大厦",
     coordinateSystem: "bd09"
   },
@@ -34,16 +38,16 @@ export const PLACES: PlaceInfo[] = [
   {
     name: "清华大学综体羽毛球场",
     abbreviation: "清华综体",
-    longitude: 116.33337396094367,
-    latitude: 40.009645090734296,
+    longitude: 116.11371005696107,
+    latitude: 39.940838582622305,
     addressType: "教育",
     coordinateSystem: "bd09"
   },
   {
     name: "清华大学西体羽毛球场",
     abbreviation: "清华西体",
-    longitude: 116.33337396094367,
-    latitude: 40.009645090734296,
+    longitude: 116.32784614815749,
+    latitude: 40.010847547774894,
     addressType: "教育",
     coordinateSystem: "bd09"
   }
