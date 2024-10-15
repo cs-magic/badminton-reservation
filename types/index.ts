@@ -28,7 +28,7 @@ export const PLACES: PlaceInfo[] = [
     coordinateSystem: "bd09"
   },
   {
-    name: "清华大学气膜馆羽毛球场",
+    name: "清华大学气膜馆",
     abbreviation: "清华气膜馆",
     longitude: 116.33337396094367,
     latitude: 40.009645090734296,
@@ -36,17 +36,17 @@ export const PLACES: PlaceInfo[] = [
     coordinateSystem: "bd09"
   },
   {
-    name: "清华大学综体羽毛球场",
+    name: "清华大学综合体育馆",
     abbreviation: "清华综体",
-    longitude: 116.11371005696107,
-    latitude: 39.940838582622305,
+    longitude: 116.33896330765732,
+    latitude: 40.01007248455777,
     addressType: "教育",
     coordinateSystem: "bd09"
   },
   {
-    name: "清华大学西体羽毛球场",
+    name: "清华大学西区体育馆",
     abbreviation: "清华西体",
-    longitude: 116.32784614815749,
+    longitude:  116.32784614815749,
     latitude: 40.010847547774894,
     addressType: "教育",
     coordinateSystem: "bd09"
