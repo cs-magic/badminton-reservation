@@ -10,8 +10,6 @@ export interface PlaceInfo {
   abbreviation: string;
   longitude: number;
   latitude: number;
-  addressType: string;
-  coordinateSystem: string;
 }
 
 /**
@@ -23,33 +21,25 @@ export const PLACES: PlaceInfo[] = [
     name: "北科大体育馆",
     abbreviation: "北科大体育馆",
     longitude: 116.36878597262196,
-    latitude: 39.996240052065495,
-    addressType: "商务大厦",
-    coordinateSystem: "bd09"
+    latitude: 39.996240052065495
   },
   {
     name: "清华大学气膜馆",
     abbreviation: "清华气膜馆",
-    longitude: 116.33337396094367,
-    latitude: 40.009645090734296,
-    addressType: "教育",
-    coordinateSystem: "bd09"
+    longitude: 116.337926,
+    latitude: 40.018185
   },
   {
     name: "清华大学综合体育馆",
     abbreviation: "清华综体",
-    longitude: 116.33896330765732,
-    latitude: 40.01007248455777,
-    addressType: "教育",
-    coordinateSystem: "bd09"
+    longitude: 116.338963,
+    latitude: 40.010072
   },
   {
     name: "清华大学西区体育馆",
     abbreviation: "清华西体",
-    longitude:  116.32784614815749,
-    latitude: 40.010847547774894,
-    addressType: "教育",
-    coordinateSystem: "bd09"
+    longitude:  116.327846,
+    latitude: 40.010848
   }
 ];
 
