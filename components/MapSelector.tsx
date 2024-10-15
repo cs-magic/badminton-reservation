@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Place, PLACES, PLACE_ABBREVIATIONS } from "../types";
+import { useEffect, useRef, useState } from "react";
+import { Place, PLACES } from "../types";
 
 interface MapSelectorProps {
   onPlacesSelected: (places: Place[]) => void;
@@ -33,6 +33,9 @@ export default function MapSelector({ onPlacesSelected }: MapSelectorProps) {
       bmap.addControl(new window.BMap.OverviewMapControl());
       bmap.addControl(new window.BMap.MapTypeControl());
 
+      // 在用户位置周围添加场地标记
+      addPlaceMarkers(bmap);
+
       // 获取用户位置
       const geolocation = new window.BMap.Geolocation();
       geolocation.getCurrentPosition((r: any) => {
@@ -40,9 +43,6 @@ export default function MapSelector({ onPlacesSelected }: MapSelectorProps) {
           const mk = new window.BMap.Marker(r.point);
           bmap.addOverlay(mk);
           bmap.panTo(r.point);
-
-          // 在用户位置周围添加场地标记
-          addPlaceMarkers(bmap, r.point);
         } else {
           console.log("Failed to get user location:", geolocation.getStatus());
         }
@@ -50,9 +50,12 @@ export default function MapSelector({ onPlacesSelected }: MapSelectorProps) {
     }
   }, [mapRef]);
 
-  const addPlaceMarkers = (bmap: any, centerPoint: any) => {
+  const addPlaceMarkers = (bmap: any) => {
     PLACES.forEach((placeInfo) => {
-      const point = new window.BMap.Point(placeInfo.longitude, placeInfo.latitude);
+      const point = new window.BMap.Point(
+        placeInfo.longitude,
+        placeInfo.latitude
+      );
       const marker = new window.BMap.Marker(point);
       bmap.addOverlay(marker);
 

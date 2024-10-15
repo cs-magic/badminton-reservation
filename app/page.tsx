@@ -5,8 +5,8 @@ import SwimLaneChart from "../components/SwimLaneChart";
 import DatePicker from "../components/DatePicker";
 import { BookingSlot, Place, PLACES } from "../types";
 import { getBookingData } from "./getBookingData";
-import dynamic from "next/dynamic";
-const MapSelector = dynamic(() => import("../components/MapSelector"), { ssr: false });
+import MapSelector from "../components/MapSelector";
+
 
 export default function Home() {
   const [bookingData, setBookingData] = useState<BookingSlot[]>([]);
