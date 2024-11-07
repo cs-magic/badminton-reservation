@@ -1,6 +1,6 @@
+import { StoredImage } from "@/types/editor.ts";
 import { X } from "lucide-react";
 import React, { useCallback, useMemo } from "react";
-import { StoredImage } from '@/store/images';
 
 interface ImagePreviewDialogProps {
   images: StoredImage[];
@@ -17,19 +17,25 @@ export function ImagePreviewDialog({
     setPreviewIndex(null);
   }, [setPreviewIndex]);
 
-  const handlePrevious = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setPreviewIndex(prev =>
-      prev !== null ? (prev > 0 ? prev - 1 : images.length - 1) : null
-    );
-  }, [images.length, setPreviewIndex]);
+  const handlePrevious = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setPreviewIndex((prev) =>
+        prev !== null ? (prev > 0 ? prev - 1 : images.length - 1) : null,
+      );
+    },
+    [images.length, setPreviewIndex],
+  );
 
-  const handleNext = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setPreviewIndex(prev =>
-      prev !== null ? (prev < images.length - 1 ? prev + 1 : 0) : null
-    );
-  }, [images.length, setPreviewIndex]);
+  const handleNext = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setPreviewIndex((prev) =>
+        prev !== null ? (prev < images.length - 1 ? prev + 1 : 0) : null,
+      );
+    },
+    [images.length, setPreviewIndex],
+  );
 
   const currentImage = useMemo(() => {
     if (previewIndex === null) return null;
@@ -80,4 +86,4 @@ export function ImagePreviewDialog({
       </div>
     </div>
   );
-} 
+}

@@ -15,20 +15,16 @@ import {
 } from "@dnd-kit/sortable";
 import { useAtom } from "jotai";
 import { memo, useEffect, useState } from "react";
-import { imageOrderAtom, StoredImage } from "@/store/images";
+import { imagesAtom, reorderImagesAtom } from '@/store/editor'
 
 interface ImageListProps {
-  images: StoredImage[];
   onDelete: (index: number) => void;
   onPreview: (index: number) => void;
-  onReorder?: (newImages: StoredImage[]) => void;
 }
 
 function ImageListComponent({
-  images,
   onDelete,
   onPreview,
-  onReorder,
 }: ImageListProps) {
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
   const [isMounted, setIsMounted] = useState(false);
@@ -42,6 +38,9 @@ function ImageListComponent({
     useSensor(KeyboardSensor),
   );
 
+  const [images] = useAtom(imagesAtom)
+  const [, reorderImages] = useAtom(reorderImagesAtom)
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
@@ -52,9 +51,8 @@ function ImageListComponent({
     const oldIndex = images.findIndex(img => img.id === active.id);
     const newIndex = images.findIndex(img => img.id === over.id);
 
-    if (oldIndex !== -1 && newIndex !== -1 && onReorder) {
-      const newImages = arrayMove(images, oldIndex, newIndex);
-      onReorder(newImages);
+    if (oldIndex !== -1 && newIndex !== -1) {
+      reorderImages({ startIndex: oldIndex, endIndex: newIndex });
     }
   };
 
@@ -107,10 +105,8 @@ function ImageListComponent({
 
 export const ImageList = memo(ImageListComponent, (prev, next) => {
   return (
-    prev.images === next.images &&
     prev.onDelete === next.onDelete &&
-    prev.onPreview === next.onPreview &&
-    prev.onReorder === next.onReorder
+    prev.onPreview === next.onPreview
   );
 });
 

@@ -3,8 +3,8 @@ import { withImmer } from "jotai-immer";
 import { atomWithStorage } from "jotai/utils";
 
 // Add new atom for platform order
-export const platformOrderAtom = atomWithStorage<PlatformType[]>(
-  "platformOrder",
+export const platformsOrderAtom = atomWithStorage<PlatformType[]>(
+  "platforms.order",
   ["jike", "zsxq", "xhs", "xls", "wechat-moment"],
 );
 

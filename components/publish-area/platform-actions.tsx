@@ -1,4 +1,5 @@
-import { editTextAtom } from "@/store/text.ts";
+import { contentAtom } from "@/store/editor.ts";
+import { ButtonWithLoading } from "@cs-magic/react/components/button-with-loading";
 import { Label } from "@cs-magic/shadcn/ui/label";
 import { Textarea } from "@cs-magic/shadcn/ui/textarea";
 import { PlatformConfig } from "@/config/platforms.tsx";
@@ -32,7 +33,7 @@ import Image from "next/image";
 
 export function LoginDialog({ platform }: { platform: PlatformConfig }) {
   const [platforms, setPlatforms] = useAtom(platformsAtom);
-  const [content] = useAtom(editTextAtom);
+  const [content] = useAtom(contentAtom);
   const [isPublishing, setIsPublishing] = useState(false);
   const [authValues, setAuthValues] = useState<Record<string, string>>({});
 
@@ -165,7 +166,6 @@ export function LoginDialog({ platform }: { platform: PlatformConfig }) {
         "Content-Type": "application/json",
         ...authValues,
       };
-      console.log({ headers });
 
       const response = await fetch(
         `https://api.cs-magic.cn/uni-pusher/${platform.id}/content`,
@@ -198,10 +198,9 @@ export function LoginDialog({ platform }: { platform: PlatformConfig }) {
           message: "内容发布成功",
         });
       });
-
-      toast.success("发布成功！");
     } catch (error) {
       console.error("发布失败:", error);
+      toast.error("发布失败：请检查账号状态");
 
       setPlatforms((prev) => {
         const p = prev[platform.id];
@@ -216,8 +215,6 @@ export function LoginDialog({ platform }: { platform: PlatformConfig }) {
           message: "发布失败：请检查账号状态",
         });
       });
-
-      toast.error("发布失败：请检查账号状态");
     } finally {
       setIsPublishing(false);
     }
@@ -228,14 +225,14 @@ export function LoginDialog({ platform }: { platform: PlatformConfig }) {
       <DialogTrigger asChild>
         <div className="flex gap-2">
           {authInfo.isLoggedIn && (
-            <Button
+            <ButtonWithLoading
+              loading={isPublishing}
               variant="outline"
               size="sm"
               onClick={(e) => {
                 e.stopPropagation();
                 handlePublish();
               }}
-              disabled={isPublishing}
             >
               {isPublishing ? (
                 <>
@@ -245,7 +242,7 @@ export function LoginDialog({ platform }: { platform: PlatformConfig }) {
               ) : (
                 "发布"
               )}
-            </Button>
+            </ButtonWithLoading>
           )}
           <Button
             variant={authInfo.isLoggedIn ? "outline" : "default"}

@@ -1,4 +1,4 @@
-import { LoginDialog } from "@/components/publish-area/platform-login-dialog.tsx";
+import { LoginDialog } from "@/components/publish-area/platform-actions.tsx";
 import { platformsConfig } from "@/config/platforms.tsx";
 import { cn } from "@cs-magic/shadcn/lib/utils";
 import {
@@ -11,7 +11,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripVertical } from "lucide-react";
 import Image from "next/image";
 
-export function PlatformItem({
+export function Platform({
   platform,
 }: {
   platform: (typeof platformsConfig)[0];

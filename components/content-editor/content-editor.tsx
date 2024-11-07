@@ -4,27 +4,20 @@ import { ImageList } from "@/components/content-editor/images/image-list.tsx";
 import { ImageUploader } from "@/components/content-editor/images/image-uploader.tsx";
 import { LocationSelectorDialog } from "@/components/content-editor/location/location-selector-dialog.tsx";
 import { TopicSelectorDialog } from "@/components/content-editor/topic/topic-selector-dialog.tsx";
-import { PlatformLogoGroup } from "@/components/publish-area/platform-logo-group.tsx";
+import { PlatformLogoGroup } from "@/components/content-editor/platform-logo-group.tsx";
+import { contentAtom, imagesAtom } from "@/store/editor";
 import { platformsAtom } from "@/store/platforms.ts";
-import {
-  cleanupImageUrls,
-  imagesAtom,
-  imageUrlCacheAtom,
-  StoredImage
-} from "@/store/images";
-import { editTextAtom } from "@/store/text.ts";
 import { JikeTopic } from "@/types/platform.ts";
 import { Button } from "@cs-magic/shadcn/ui/button";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { MapPin } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 export function ContentEditor() {
-  const [content, setContent] = useAtom(editTextAtom);
   const [platforms, setPlatforms] = useAtom(platformsAtom);
+  const [content, setContent] = useAtom(contentAtom);
   const [images, setImages] = useAtom(imagesAtom);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
-  const [urlCache, setUrlCache] = useAtom(imageUrlCacheAtom);
 
   // 即刻圈子相关状态
   const [topicDialogOpen, setTopicDialogOpen] = useState(false);
@@ -61,23 +54,8 @@ export function ContentEditor() {
     [previewIndex, setImages],
   );
 
-  const handleReorderImages = useCallback(
-    (newStoredImages: StoredImage[]) => {
-      setImages(newStoredImages);
-    },
-    [setImages],
-  );
-
   const handlePreviewImage = useCallback((index: number) => {
     setPreviewIndex(index);
-  }, []);
-
-  // 在组件卸载时清理 URL
-  useEffect(() => {
-    return () => {
-      cleanupImageUrls(urlCache);
-      setUrlCache({});
-    };
   }, []);
 
   return (
@@ -91,10 +69,7 @@ export function ContentEditor() {
 
       {/* 按钮组 */}
       <div className="flex gap-2">
-        <ImageUploader 
-          images={images} 
-          setImages={setImages}
-        />
+        <ImageUploader />
 
         <Button
           variant="outline"
@@ -123,10 +98,8 @@ export function ContentEditor() {
       {images.length > 0 && (
         <div className="mt-4">
           <ImageList
-            images={images}
             onDelete={handleDeleteImage}
             onPreview={handlePreviewImage}
-            onReorder={handleReorderImages}
           />
         </div>
       )}

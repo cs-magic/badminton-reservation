@@ -1,4 +1,4 @@
-import { StoredImage } from "@/store/images";
+import { StoredImage } from "@/types/editor.ts";
 import { Button } from "@cs-magic/shadcn/ui/button";
 import { AnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";

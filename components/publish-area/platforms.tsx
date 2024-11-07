@@ -1,8 +1,8 @@
 "use client";
 
-import { PlatformItem } from "./platform-item";
+import { Platform } from "components/publish-area/platform.tsx";
 import { platformsConfig } from "@/config/platforms";
-import { platformOrderAtom } from "@/store/platforms.ts";
+import { platformsOrderAtom } from "@/store/platforms.ts";
 import { Accordion } from "@cs-magic/shadcn/ui/accordion";
 import {
   closestCenter,
@@ -21,7 +21,7 @@ import { useAtom } from "jotai";
 import { useState } from "react";
 
 export default function Platforms() {
-  const [platformOrder, setPlatformOrder] = useAtom(platformOrderAtom);
+  const [platformOrder, setPlatformOrder] = useAtom(platformsOrderAtom);
   const [expandedPlatforms, setExpandedPlatforms] = useState<string[]>([]);
   const [dndContextId] = useState("platforms-dnd-context");
 
@@ -71,7 +71,7 @@ export default function Platforms() {
             strategy={verticalListSortingStrategy}
           >
             {sortedPlatforms.map((platform) => (
-              <PlatformItem key={platform.id} platform={platform} />
+              <Platform key={platform.id} platform={platform} />
             ))}
           </SortableContext>
         </Accordion>
