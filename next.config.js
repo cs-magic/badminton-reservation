@@ -1,14 +1,18 @@
-const path = require('path');
+const path = require("path");
 
-const dotenv = require('dotenv');
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+const dotenv = require("dotenv");
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    appDir: true,
-  },
-}
 
-module.exports = nextConfig
+  images: {
+    remotePatterns: [
+      { protocol: "http", hostname: "**" },
+      { protocol: "https", hostname: "**" },
+    ],
+  },
+};
+
+module.exports = nextConfig;
