@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
 import debounce from 'lodash/debounce';
+import React, { useState, useEffect, useCallback } from 'react';
 
 interface DatePickerProps {
   selectedDate: Date;
@@ -49,13 +49,13 @@ export default function DatePicker({ selectedDate, onDateChange, isLoading }: Da
         日期选择: {formatDate(getDateFromOffset(dayOffset))}
       </h2>
       <input
-        type="range"
-        min="0"
-        max="6"
-        value={dayOffset}
-        onChange={handleSliderChange}
         className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
         disabled={isLoading}
+        max="6"
+        min="0"
+        type="range"
+        value={dayOffset}
+        onChange={handleSliderChange}
       />
       <div className="flex justify-between text-xs text-gray-500 mt-1">
         <span>{formatDate(getDateFromOffset(0))}</span>

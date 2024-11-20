@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Place, PLACES } from "../types";
+
+import { type Place, PLACES } from "../types";
 
 interface MapSelectorProps {
   onPlacesSelected: (places: Place[]) => void;
@@ -92,10 +93,10 @@ export default function MapSelector({ onPlacesSelected }: MapSelectorProps) {
             className="inline-flex items-center bg-white border rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
           >
             <input
-              type="checkbox"
               checked={selectedPlaces.includes(placeInfo.name)}
-              onChange={() => handlePlaceToggle(placeInfo.name)}
               className="form-checkbox h-4 w-4 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300"
+              type="checkbox"
+              onChange={() => handlePlaceToggle(placeInfo.name)}
             />
             <span className="ml-2 text-sm text-gray-700">
               {placeInfo.abbreviation}

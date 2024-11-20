@@ -1,6 +1,7 @@
 import { cn } from "@cs-magic/shadcn/lib/utils";
 import { useMemo } from "react";
-import { BookingSlot, PLACE_ABBREVIATIONS, Place, PLACES } from "../types";
+
+import { type BookingSlot, PLACE_ABBREVIATIONS, type Place, PLACES } from "../types";
 
 interface SwimLaneChartProps {
   bookingData: BookingSlot[];

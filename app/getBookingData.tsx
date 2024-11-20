@@ -2,7 +2,7 @@
 
 import { api } from "@cs-magic/common/api/api.js"
 
-import { BookingSlot } from "../types"
+import type { BookingSlot } from "../types"
 
 export async function getBookingData(date: string, gym: string): Promise<BookingSlot[]> {
   const data = await api.get(`https://api.cs-magic.cn/badminton?date=${date}&gym=${gym}`)

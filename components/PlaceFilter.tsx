@@ -1,5 +1,6 @@
 import React from 'react';
-import { Place } from '../types';
+
+import type { Place } from '../types';
 
 interface PlaceFilterProps {
   places: Place[];
@@ -16,10 +17,10 @@ export default function PlaceFilter({ places, selectedPlaces, onPlaceToggle, pla
         {places.map(place => (
           <label key={place} className="inline-flex items-center bg-white border rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <input
-              type="checkbox"
               checked={selectedPlaces.includes(place)}
-              onChange={() => onPlaceToggle(place)}
               className="form-checkbox h-4 w-4 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300"
+              type="checkbox"
+              onChange={() => onPlaceToggle(place)}
             />
             <span className="ml-2 text-sm text-gray-700">{placeAbbreviations[place]}</span>
           </label>

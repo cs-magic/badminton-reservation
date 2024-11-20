@@ -1,11 +1,14 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import SwimLaneChart from "../components/SwimLaneChart";
+
 import DatePicker from "../components/DatePicker";
-import { BookingSlot, Place, PLACES } from "../types";
-import { getBookingData } from "./getBookingData";
 import MapSelector from "../components/MapSelector";
+import SwimLaneChart from "../components/SwimLaneChart";
+import { type BookingSlot, type Place, PLACES } from "../types";
+
+import { getBookingData } from "./getBookingData";
+
 
 
 export default function Home() {
@@ -62,8 +65,8 @@ export default function Home() {
       </h1>
       <div className="card p-6">
         <MapSelector onPlacesSelected={handlePlaceChange} />
-        <DatePicker selectedDate={selectedDate} onDateChange={handleDateChange} isLoading={isLoading} />
-        <SwimLaneChart bookingData={bookingData} selectedPlaces={selectedPlaces} selectedDate={selectedDate} />
+        <DatePicker isLoading={isLoading} selectedDate={selectedDate} onDateChange={handleDateChange} />
+        <SwimLaneChart bookingData={bookingData} selectedDate={selectedDate} selectedPlaces={selectedPlaces} />
       </div>
     </main>
   );
